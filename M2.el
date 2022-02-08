@@ -186,6 +186,13 @@
 			'syntax-table (string-to-syntax "|"))))
 		 (string-to-syntax "|")))))))
 
+;;; bug: /// foo ///// is highlighted propertly while typing, but not
+;;; when initially opening a file (the last two /'s aren't colored
+;;; properly)
+
+;;; TODO: don't highlight when initial /// preceded by doc or TEST
+;;; (separated by the legal white space - " \t\r" (WHITE in ctype.d))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; M2 interpreter
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
