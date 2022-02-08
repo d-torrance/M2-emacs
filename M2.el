@@ -182,15 +182,13 @@
 		       (put-text-property
 			(- (point) num-slashes) (point)
 			'syntax-table (string-to-syntax "|"))))
-		 (unless (looking-back "\\(doc\\|TEST\\)[ \t\r]*///")
-		   (string-to-syntax "|"))))))))
+		 (string-to-syntax "|")))))))
 
 ;;; bug: /// foo ///// is highlighted propertly while typing, but not
 ;;; when initially opening a file (the last two /'s aren't colored
 ;;; properly)
 
-;;; bug: with doc/TEST, it thinks the closing slashes are opening
-;;; slashes for a new string
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; M2 interpreter
