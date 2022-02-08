@@ -65,6 +65,7 @@
   (set (make-local-variable 'comint-input-autoexpand) nil)
   (set (make-local-variable 'transient-mark-mode) t)
   (set (make-local-variable 'indent-line-function) 'M2-electric-tab)
+  (setq-local syntax-propertize-function M2-syntax-propertize-function)
   (setq font-lock-defaults '( M2-mode-font-lock-keywords ))
   (setq truncate-lines t)
   (setq case-fold-search nil)
@@ -167,6 +168,23 @@
     (modify-syntax-entry ?&  "." syntax-table)
     (modify-syntax-entry ?|  "." syntax-table)))
  (list M2-mode-syntax-table M2-comint-mode-syntax-table))
+
+;;; multi-line strings /// ... ///
+;;; because of the way forward slashes are escaped, such a string
+;;; will always end with an odd (>= 3) number of slashes
+(defconst M2-syntax-propertize-function
+  (syntax-propertize-rules
+   ("///" (0 (progn
+	       (if (nth 3 (syntax-ppss))
+		   (let ((num-slashes 3))
+		     (while (char-equal ?/ (following-char))
+		       (setq num-slashes (1+ num-slashes))
+		       (forward-char))
+		     (when (oddp num-slashes)
+		       (put-text-property
+			(- (point) num-slashes) (point)
+			'syntax-table (string-to-syntax "|"))))
+		 (string-to-syntax "|")))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; M2 interpreter
