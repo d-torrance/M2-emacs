@@ -148,8 +148,6 @@
 
 ;; syntax
 
-; bug: ///A"B"C/// vs ///ABC///
-
 (mapcar
  (function
   (lambda (syntax-table)
