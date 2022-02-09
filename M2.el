@@ -188,7 +188,12 @@
 ;;; when initially opening a file (the last two /'s aren't colored
 ;;; properly)
 
-
+(defun M2-in-doc-or-test-string ()
+  (let ((state (syntax-ppss)))
+    (when (nth 3 state)
+      (save-excursion
+	(goto-char (nth 8 state))
+	(looking-back "\\b\\(doc\\|TEST\\)[ \t\r]*\\(//\\)?")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; M2 interpreter
