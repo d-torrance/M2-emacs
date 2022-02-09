@@ -195,6 +195,33 @@
 	(goto-char (nth 8 state))
 	(looking-back "\\b\\(doc\\|TEST\\)[ \t\r]*\\(//\\)?")))))
 
+(defun M2-font-lock-fontify-block (start end)
+  "Fontify code block, for doc and TEST strings.  Based on
+`org-src-font-lock-fontify-block'."
+  (let ((string (buffer-substring-no-properties start end))
+	(modified (buffer-modified-p))
+	(M2-buffer (current-buffer)))
+    (remove-text-properties start end '(face nil))
+    (with-current-buffer
+	(get-buffer-create "*M2-fontification*")
+      (let ((inhibit-modification-hooks nil))
+	(erase-buffer)
+	(insert string " "))
+      (unless (eq major-mode 'M2-mode) (M2-mode))
+      (font-lock-ensure)
+      (let ((pos (point-min)) next)
+	(while (setq next (next-property-change pos))
+	  (dolist (prop (cons 'face font-lock-extra-managed-props))
+	    (let ((new-prop (get-text-property pos prop)))
+	      (put-text-property
+	       (+ start (1- pos)) (1- (+ start next)) prop new-prop
+	       M2-buffer)))
+	  (setq pos next))))
+    (add-text-properties
+     start end
+     '(font-lock-fontified t fontified t font-lock-multiline t))
+    (set-buffer-modified-p modified)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; M2 interpreter
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
