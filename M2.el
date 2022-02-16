@@ -172,21 +172,20 @@
 ;;; will always end with an odd (>= 3) number of slashes
 (defconst M2-syntax-propertize-function
   (syntax-propertize-rules
-   ("///" (0 (progn
-	       (if (nth 3 (syntax-ppss))
-		   (let ((num-slashes 3))
-		     (while (char-equal ?/ (following-char))
-		       (setq num-slashes (1+ num-slashes))
-		       (forward-char))
-		     (when (oddp num-slashes)
-		       (put-text-property
-			(- (point) num-slashes) (point)
-			'syntax-table (string-to-syntax "|"))))
-		 (string-to-syntax "|")))))))
-
-;;; bug: /// foo ///// is highlighted propertly while typing, but not
-;;; when initially opening a file (the last two /'s aren't colored
-;;; properly)
+   ("///" (0 (let* ((start (match-beginning 0))
+		    (end start))
+	       (if (nth 3 (syntax-ppss start)) ; inside a string
+		   (progn
+		     (while (char-equal ?/ (char-after end))
+		       (setq end (1+ end)))
+		     (prog1
+			 (when (oddp (- end start))
+			   (put-text-property
+			    start end 'syntax-table (string-to-syntax "|")))
+		       (goto-char end)))
+		 (prog1
+		     (string-to-syntax "|")
+		   (forward-char 3))))))))
 
 (defun M2-in-doc-or-test-string ()
   (let ((state (syntax-ppss)))
