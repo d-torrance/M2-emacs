@@ -640,9 +640,12 @@ be sent can be entered, with history."
 
 (defun M2-electric-tab ()
      (interactive)
-     (delete-region (progn (beginning-of-line) (point))
-		    (progn (back-to-indentation) (point)))
-     (indent-to (M2-this-line-indent-amount)))
+     (if (nth 3 (syntax-ppss))
+	 (indent-relative)
+       (progn
+	 (delete-region (progn (beginning-of-line) (point))
+			(progn (back-to-indentation) (point)))
+	 (indent-to (M2-this-line-indent-amount)))))
 
 (defvar M2-demo-buffer
   (save-excursion
