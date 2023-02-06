@@ -77,6 +77,9 @@
 ;; (define-key M2-mode-map "}" 'M2-electric-right-brace)
 (define-key M2-mode-map ";" 'M2-electric-semi)
 ;; (define-key M2-mode-map "\^Cd" 'M2-find-documentation)
+(define-key M2-mode-map (kbd "C-c C-j") 'M2-send-line-to-program)
+(define-key M2-mode-map (kbd "C-c C-r") 'M2-send-region-to-program)
+(define-key M2-mode-map (kbd "C-c C-b") 'M2-send-buffer-to-program)
 
 (define-key M2-comint-mode-map "\t" 'completion-at-point)
 (define-key M2-comint-mode-map [ f2 ] 'M2-position-point)
@@ -125,6 +128,9 @@
    '("Macaulay2"
      ["Start Macaulay2"               M2]
      ["Send line/region to Macaulay2" M2-send-to-program]
+     ["Send line to Macaulay2"        M2-send-line-to-program]
+     ["Send region to Macaulay2"      M2-send-region-to-program]
+     ["Send buffer to Macaulay2"      M2-send-buffer-to-program]
      ["Newline and indent"            M2-newline-and-indent]
      ["Electric semicolon"            M2-electric-semi]
      ["Electric right brace"          M2-electric-right-brace]
@@ -482,6 +488,35 @@ be sent can be entered, with history."
 		 (end-of-line)
 		 (insert "\n")))
 	   (M2-to-end-of-prompt))))
+
+(defun M2--get-send-to-buffer ()
+  (list (cond (current-prefix-arg (read-from-minibuffer
+				   "buffer to send command to: " "*M2*"
+				   nil nil 'M2-send-to-buffer-history))
+	      (t (car M2-send-to-buffer-history)))))
+
+(defun M2--send-to-program (send-to-buffer start end)
+  (save-excursion (set-buffer send-to-buffer) (end-of-buffer))
+  (append-to-buffer send-to-buffer start end)
+  (save-excursion (set-buffer send-to-buffer) (comint-send-input)))
+
+(defun M2-send-line-to-program (send-to-buffer)
+  (interactive (M2--get-send-to-buffer))
+  (M2--send-to-program send-to-buffer
+		      (line-beginning-position) (line-end-position)))
+
+(defun M2-send-region-to-program (send-to-buffer)
+  (interactive (M2--get-send-to-buffer))
+  (M2--send-to-program send-to-buffer (region-beginning) (region-end)))
+
+(defun M2-send-buffer-to-program (send-to-buffer)
+  (interactive (M2--get-send-to-buffer))
+  (M2--send-to-program send-to-buffer (point-min) (point-max)))
+
+(defun M2-send-to-program (send-to-buffer)
+  (interactive (M2--get-send-to-buffer))
+  (cond (mark-active (M2-send-region-to-program send-to-buffer))
+	(t (M2-send-line-to-program send-to-buffer))))
 
 (defun M2-set-demo-buffer()
   "Set the variable M2-demo-buffer to the current buffer, so that later,
