@@ -128,6 +128,9 @@
    '("Macaulay2"
      ["Start Macaulay2"               M2]
      ["Send line/region to Macaulay2" M2-send-to-program]
+     ["Send line to Macaulay2"        M2-send-line-to-program]
+     ["Send region to Macaulay2"      M2-send-region-to-program]
+     ["Send buffer to macaulay2"      M2-send-buffer-to-program]
      ["Newline and indent"            M2-newline-and-indent]
      ["Electric semicolon"            M2-electric-semi]
      ["Electric right brace"          M2-electric-right-brace]
