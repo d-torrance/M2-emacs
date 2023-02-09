@@ -77,6 +77,9 @@
 ;; (define-key M2-mode-map "}" 'M2-electric-right-brace)
 (define-key M2-mode-map ";" 'M2-electric-semi)
 ;; (define-key M2-mode-map "\^Cd" 'M2-find-documentation)
+(define-key M2-mode-map (kbd "C-c C-j") 'M2-send-line-to-program)
+(define-key M2-mode-map (kbd "C-c C-r") 'M2-send-region-to-program)
+(define-key M2-mode-map (kbd "C-c C-b") 'M2-send-buffer-to-program)
 
 (define-key M2-comint-mode-map "\t" 'completion-at-point)
 (define-key M2-comint-mode-map [ f2 ] 'M2-position-point)
