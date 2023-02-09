@@ -80,6 +80,10 @@
 (define-key M2-mode-map (kbd "C-c C-j") 'M2-send-line-to-program)
 (define-key M2-mode-map (kbd "C-c C-r") 'M2-send-region-to-program)
 (define-key M2-mode-map (kbd "C-c C-b") 'M2-send-buffer-to-program)
+(define-key M2-mode-map (kbd "C-c <C-up>")
+  'M2-send-buffer-from-beg-to-here-to-program)
+(define-key M2-mode-map (kbd "C-c <C-down>")
+  'M2-send-buffer-from-here-to-end-to-program)
 
 (define-key M2-comint-mode-map "\t" 'completion-at-point)
 (define-key M2-comint-mode-map [ f2 ] 'M2-position-point)
@@ -130,7 +134,11 @@
      ["Send line/region to Macaulay2" M2-send-to-program]
      ["Send line to Macaulay2"        M2-send-line-to-program]
      ["Send region to Macaulay2"      M2-send-region-to-program]
-     ["Send buffer to macaulay2"      M2-send-buffer-to-program]
+     ["Send buffer to Macaulay2"      M2-send-buffer-to-program]
+     ["Send buffer to here to Macaulay2"
+      M2-send-buffer-from-beg-to-here-to-program]
+     ["Send buffer from here to Macaulay2"
+      M2-send-buffer-from-here-to-end-to-program]
      ["Newline and indent"            M2-newline-and-indent]
      ["Electric semicolon"            M2-electric-semi]
      ["Electric right brace"          M2-electric-right-brace]
@@ -499,6 +507,14 @@ be sent can be entered, with history."
 (defun M2-send-buffer-to-program (send-to-buffer)
   (interactive (M2--get-send-to-buffer))
   (M2--send-to-program-helper send-to-buffer (point-min) (point-max)))
+
+(defun M2-send-buffer-from-beg-to-here-to-program (send-to-buffer)
+  (interactive (M2--get-send-to-buffer))
+  (M2--send-to-program-helper send-to-buffer (point-min) (point)))
+
+(defun M2-send-buffer-from-here-to-end-to-program (send-to-buffer)
+  (interactive (M2--get-send-to-buffer))
+  (M2--send-to-program-helper send-to-buffer (point) (point-max)))
 
 (defun M2-set-demo-buffer()
   "Set the variable M2-demo-buffer to the current buffer, so that later,
