@@ -51,6 +51,7 @@
   (M2-common)
   (setq comint-prompt-regexp M2-comint-prompt-regexp)
   (add-hook 'comint-output-filter-functions 'M2-info-help nil t)
+  (add-hook 'comint-output-filter-functions 'M2-show-image nil t)
   (setq-local compilation-error-regexp-alist M2-error-regexp-alist)
   (setq-local compilation-transform-file-match-alist
 	      M2-transform-file-match-alist)
@@ -536,6 +537,18 @@ for more."
   (save-excursion
     (when (string-match "-\\* infoHelp: \\(.*\\) \\*-" string)
       (info-other-window (match-string 1 string)))))
+
+(defun M2-show-image (string)
+  "Display image in buffer if STRING matches '-* show URL: file://foo *-'."
+  (if (string-match "-\\* show URL: file://\\(.*\\) \\*-" string)
+      (let ((img (match-string 1 string)))
+	(save-excursion
+	  (re-search-backward "-\\* show URL")
+	  (delete-region (point) (point-at-eol))
+	  (if (display-graphic-p)
+	      (progn (insert "\n") (insert-image-file img))
+	    (user-error
+	     "unable to insert image; set 'showInEmacs' to 'false' in M2"))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; M2-mode
