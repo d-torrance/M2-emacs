@@ -54,6 +54,7 @@
   (setq-local compilation-error-regexp-alist M2-error-regexp-alist)
   (setq-local compilation-transform-file-match-alist
 	      M2-transform-file-match-alist)
+  (setq-local font-lock-fontify-region-function #'M2-font-lock-fontify-region)
   (compilation-shell-minor-mode 1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -536,6 +537,18 @@ for more."
   (save-excursion
     (when (string-match "-\\* infoHelp: \\(.*\\) \\*-" string)
       (info-other-window (match-string 1 string)))))
+
+(defun M2-font-lock-fontify-region (beg end loudly)
+  (font-lock-default-fontify-region beg end loudly)
+  (message "%s" (list comint-last-input-end comint-last-prompt))
+  (when (= (point) (car comint-last-prompt))
+    (let ((prop (get-text-property (point) 'face)))
+      (when (eq prop 'font-lock-string-face)
+	(forward-line -1) (insert "\""))
+      (when (eq prop 'font-lock-comment-face)
+	(forward-line -1) (insert "*-")))))
+;; TODO: point ends up 1 or 2 (depending on str v. comment) places before
+;; we want it at after the prompt -- why?
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; M2-mode
