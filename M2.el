@@ -538,6 +538,39 @@ for more."
     (when (string-match "-\\* infoHelp: \\(.*\\) \\*-" string)
       (info-other-window (match-string 1 string)))))
 
+(defvar M2-comint--font-lock-buffer nil
+  "Invisible buffer used to fontify Macaulay2 input and output.")
+
+(defun M2-comint--kill-font-lock-buffer ()
+  "Hook to run when killing font-lock buffer"
+  (setq M2-comint--font-lock-buffer nil))
+
+(defun M2-comint--new-font-lock-buffer ()
+  "Generate a new font lock buffer"
+  (setq M2-comint--font-lock-buffer (generate-new-buffer " *M2 font-lock*"))
+  (with-current-buffer M2-comint--font-lock-buffer
+    (add-hook 'kill-buffer-hook #'M2-comint--kill-font-lock-buffer nil t)
+    (M2-mode)))
+
+(defun M2-play-with-buffers ()
+  (interactive)
+  ;; TODO: the next prompt is included in the output field, but it's
+  ;; ready-only.  how do we remove just the prompt?
+  ;; TODO: we may not have fields if comint-use-prompt-regexp is non-nil,
+  ;; so ideally, we have two versions
+  (let ((str (field-string-no-properties))
+	(field-offset (- (point) (field-end))))
+    (unless M2-comint--font-lock-buffer (M2-comint--new-font-lock-buffer))
+    (with-current-buffer M2-comint--font-lock-buffer
+      (delete-region (point-min) (point-max))
+      (insert str)
+      (font-lock-fontify-buffer))
+    (delete-field)
+    ;; TODO: works in fundamental-mode, but for some reason comint-mode
+    ;; is removing the face properties -- why?
+    (insert-buffer-substring M2-comint--font-lock-buffer)
+    (forward-char field-offset)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; M2-mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
