@@ -31,7 +31,9 @@
 
 ;;;###autoload
 (define-derived-mode M2-mode prog-mode "Macaulay2"
-  "Major mode for editing Macaulay2 source code.\n\n\\{M2-mode-map}" (M2-common))
+  "Major mode for editing Macaulay2 source code.\n\n\\{M2-mode-map}"
+  (M2-common)
+  (setq font-lock-defaults '( M2-mode-font-lock-keywords )))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.m2\\'" . M2-mode))
@@ -69,7 +71,6 @@
   (set (make-local-variable 'comint-input-autoexpand) nil)
   (set (make-local-variable 'transient-mark-mode) t)
   (set (make-local-variable 'indent-line-function) 'M2-electric-tab)
-  (setq font-lock-defaults '( M2-mode-font-lock-keywords ))
   (setq truncate-lines t)
   (setq case-fold-search nil)
   (add-hook 'completion-at-point-functions 'M2-completion-at-point nil t))
