@@ -252,7 +252,7 @@ current window added to it."
 (defun M2-on-screen () (and (< (M2-left-hand-column) (current-column)) (< (current-column) (M2-right-hand-column))))
 (defun M2-position-point (pos)
   "Scroll display horizontally so point ends up at center of screen, or
-  at column position given by prefix argument."
+at column position given by prefix argument."
   (interactive "P")
   (if (listp pos) (setq pos (car pos)))
   (if (not pos)
@@ -262,7 +262,7 @@ current window added to it."
 
 (defun M2-jog-right (arg)
   "Move point right and scroll display so it remains visible.  Optional
-  prefix argument tells how far to move."
+prefix argument tells how far to move."
   (interactive "P")
   (if (listp arg) (setq arg (car arg)))
   (goto-char
@@ -273,7 +273,7 @@ current window added to it."
 
 (defun M2-jog-left (arg)
   "Move point left and scroll display so it remains visible.  Optional
-  prefix argument tells how far to move."
+prefix argument tells how far to move."
   (interactive "P")
   (if (listp arg) (setq arg (car arg)))
   (goto-char
@@ -291,7 +291,7 @@ current window added to it."
 
 (defun M2-toggle-truncate-lines ()
   "Toggle the value of truncate-lines, the variable which determines whether
-  long lines are truncated or wrapped on the screen."
+long lines are truncated or wrapped on the screen."
   (interactive)
   (setq truncate-lines (not truncate-lines))
   (if truncate-lines
