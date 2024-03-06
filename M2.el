@@ -6,7 +6,7 @@
 
 ;;; Commentary:
 ;; Macaulay2 makes no attempt to wrap long output lines, so we provide
-;; functions that make horizontal scrolling easier. In addition:
+;; functions that make horizontal scrolling easier.  In addition:
 ;;    - run Macaulay2 as a command interpreter in an Emacs buffer
 ;;    - provide a major mode used for editing Macaulay2 source files
 
