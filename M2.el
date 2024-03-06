@@ -613,7 +613,7 @@ Set it with `M2-set-demo-buffer'." )
 ;;; "blink" evaluated region (heavily inspired by ESS)
 
 (defcustom M2-blink-region-flag t
-  "If non-nil, evaluated region is highlighted for `M2-blink-delay' seconds."
+  "Non-nil means evaluated region is highlighted for `M2-blink-delay' seconds."
   :type 'boolean
   :group 'Macaulay2)
 
