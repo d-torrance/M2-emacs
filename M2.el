@@ -31,13 +31,13 @@
 
 ;;;###autoload
 (define-derived-mode M2-mode prog-mode "Macaulay2"
-  "Major mode for editing Macaulay2 source code.\n\n\\{M2-mode-map}" (M2-common))
+  "Major mode for editing Macaulay2 source code.\n\n\\{M2-mode-map}." (M2-common))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.m2\\'" . M2-mode))
 
 (defcustom M2-indent-level 4
-  "Indentation increment in Macaulay2 mode"
+  "Indentation increment in Macaulay2 mode."
   :type 'integer
   :group 'Macaulay2)
 
@@ -47,7 +47,7 @@
 
 ;;;###autoload
 (define-derived-mode M2-comint-mode comint-mode "Macaulay2 Interaction"
-  "Major mode for interacting with a Macaulay2 process.\n\n\\{M2-comint-mode-map}"
+  "Major mode for interacting with a Macaulay2 process.\n\n\\{M2-comint-mode-map}."
   (M2-common)
   (setq comint-prompt-regexp M2-comint-prompt-regexp)
   (add-hook 'comint-preoutput-filter-functions 'M2-info-help nil t)
@@ -133,7 +133,7 @@
 	["Start demo"                     M2-demo]))
 
 (easy-menu-define M2-menu M2-mode-map
-  "Menu for Macaulay2 major mode"
+  "Menu for Macaulay2 major mode."
   (append
    '("Macaulay2"
      ["Start Macaulay2"               M2]
@@ -155,7 +155,7 @@
    M2-common-menu))
 
 (easy-menu-define M2-comint-menu M2-comint-mode-map
-  "Menu for Macaulay2 Interaction major mode"
+  "Menu for Macaulay2 Interaction major mode."
   (append
    '("Macaulay2 Interaction"
      ["Send to Macaulay2"   comint-send-input]
@@ -211,7 +211,7 @@
 (defvar M2-history (list M2-command) "The history of recent Macaulay2 command lines.")
 (defvar M2-send-to-buffer-history '("*M2*") "The history of recent Macaulay2 send-to buffers.")
 (defvar M2-tag-history () "The history of recent Macaulay2 command name tags.")
-(defvar M2-usual-jog 30 "Usual distance scrolled by M2-jog-left and M2-jog-right")
+(defvar M2-usual-jog 30 "Usual distance scrolled by M2-jog-left and M2-jog-right.")
 
 (defun M2-add-width-option (command)
   (concat (replace-regexp-in-string " +--print-width +[0-9]+\\| +$" "" command)
