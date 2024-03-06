@@ -401,7 +401,7 @@ Sends code between START and END to Macaulay2 inferior process in
 SEND-TO-BUFFER."
   (unless (and (get-buffer send-to-buffer) (get-buffer-process send-to-buffer))
     (user-error
-     "Start a Macaulay2 process first with `M-x M2' or `%s'."
+     "Start a Macaulay2 process first with `M-x M2' or `%s'"
      (key-description (where-is-internal #'M2 overriding-local-map t))))
   (display-buffer send-to-buffer '(nil (inhibit-same-window . t)))
   (let ((cmd (buffer-substring start end)))
