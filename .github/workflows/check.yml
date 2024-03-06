@@ -1,0 +1,17 @@
+name: check
+
+on:
+  push:
+    branches:
+      - checkdoc
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Emacs
+        run: sudo apt-get install -y emacs-nox
+      - name: Run MELPA checks
+        uses: leotaku/elisp-check@master
