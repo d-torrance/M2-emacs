@@ -475,7 +475,7 @@ for more."
   (switch-to-buffer M2-demo-buffer))
 
 (defun M2-demo()
-  "Sets up a new frame with a big font for a Macaulay2 demo."
+  "Set up a new frame with a big font for a Macaulay2 demo."
   (interactive)
   (let* ((f (prog1
 	      (select-frame
