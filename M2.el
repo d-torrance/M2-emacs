@@ -211,7 +211,7 @@
 (defvar M2-history (list M2-command) "The history of recent Macaulay2 command lines.")
 (defvar M2-send-to-buffer-history '("*M2*") "The history of recent Macaulay2 send-to buffers.")
 (defvar M2-tag-history () "The history of recent Macaulay2 command name tags.")
-(defvar M2-usual-jog 30 "Usual distance scrolled by M2-jog-left and M2-jog-right.")
+(defvar M2-usual-jog 30 "Usual distance scrolled by `M2-jog-left' and `M2-jog-right'.")
 
 (defun M2-add-width-option (command)
   (concat (replace-regexp-in-string " +--print-width +[0-9]+\\| +$" "" command)
@@ -314,7 +314,7 @@ current window added to it."
     (list start end M2-symbols :exclusive 'no)))
 
 (defun M2-to-end-of-prompt()
-     "Move to end of prompt matching M2-comint-prompt-regexp on this line."
+     "Move to end of prompt matching `M2-comint-prompt-regexp' on this line."
      (interactive)
      (beginning-of-line)
      (let ((case-fold-search nil))
@@ -464,7 +464,7 @@ for more."
   (forward-paragraph))
 
 (defun M2-set-demo-buffer()
-  "Set the variable M2-demo-buffer to the current buffer, so that later,
+  "Set the variable `M2-demo-buffer' to the current buffer, so that later,
 `M2-get-input-from-demo-buffer' can obtain lines from this buffer."
   (interactive)
   (setq M2-demo-buffer (current-buffer)))
