@@ -390,12 +390,31 @@ wrapped on the screen."
   "Redisplay the selected window."
     (set-window-start (selected-window) (window-start (selected-window))))
 
+(defun M2-get-output (code)
+  "Run CODE silently and return its output as a string."
+  (let ((inhibit-quit nil))
+    (car (comint-redirect-results-list
+	  (concat
+	   "lineNumber -= 2; " ;; preserve line number
+	   "<< \"OUTPUT = \" << " code ";")
+	  "OUTPUT = \\(.*\\)" 1))))
+
+(defun M2-get-completions (string)
+  "Get list of possible completions for STRING."
+  (read
+   (M2-get-output
+    (concat "\"(\" | demark(\" \", (format @@ toString) \\ apropos \"^"
+	    (regexp-quote string) "\") | \")\""))))
+
 (defun M2-completion-at-point ()
   "Function used for `completion-at-point-functions' for the M2 major modes."
   (let* ((bounds (bounds-of-thing-at-point 'symbol))
          (start (car bounds))
          (end (cdr bounds)))
-    (list start end M2-symbols-completion-table :exclusive 'no)))
+    (list start end
+	  (append M2-symbols-completion-table
+		  (M2-get-completions (buffer-substring-no-properties start end)))
+	  :exclusive 'no)))
 
 (defun M2-to-end-of-prompt ()
      "Move to end of prompt matching `M2-comint-prompt-regexp' on this line."
